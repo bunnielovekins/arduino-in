@@ -2,7 +2,7 @@
 #include <Ethernet.h>
 
 byte mac[] = { 0x8E, 0x8D, 0xBE, 0x8F, 0xFE, 0xED };
-char server[] = "ec2-54-213-87-44.us-west-2.compute.amazonaws.com";
+char server[] = "ec2-54-213-70-98.us-west-2.compute.amazonaws.com";
 int myId = -1;
 char myName[] = "PetersDesk";
 int sensorPin = A0;
@@ -49,6 +49,7 @@ void setup() {
         getId();
       }
     }
+    else delay(100);
   }
 }
 
@@ -68,14 +69,13 @@ void loop()
   client.println(conlen);
   client.println(conclose);
   client.println();
-  client.println(String("val=")+ (sensorValue = analogRead(sensorPin)));
+  sensorValue = analogRead(sensorPin);
+  client.println(String("val=")+ sensorValue);
   client.println();
-  Serial.println(String("val=")+ (sensorValue = analogRead(sensorPin)));
-//  stop();
+  Serial.println(String("val=")+ sensorValue);
 }
 
 void stop(){
-
   client.flush();
   while(client.available()){
     client.read();
@@ -83,12 +83,6 @@ void stop(){
   if(!client.connected()){
     client.stop();
     Serial.println("Stopping...");
-  }
-}
-
-void readAll(){
-  while(client.available()){
-    client.read();
   }
 }
 
